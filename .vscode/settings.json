@@ -1,5 +1,6 @@
 {
     "python.linting.mypyEnabled": true,
+    "python.formatting.provider": "black",
     "python.autoComplete.extraPaths": ["app/__pypackages__/3.9/lib"],
     "python.analysis.extraPaths": ["app/__pypackages__/3.9/lib"]
   }

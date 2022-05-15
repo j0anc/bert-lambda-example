@@ -1,24 +1,38 @@
-
 import json
+import sys
 from os import getenv
-from inference import load_tokenizer_model, inference, postprocessing, id2label
+from app.inference import (
+    load_tokenizer_model,
+    model_inference,
+    postprocessing,
+    id2label,
+)
 
 
 def handler(event, context):
 
-    # get text for inference from the event object
-    event_body_dict = json.loads(event["body"])
-    text = event_body_dict["text"]
+    try:
 
-    # get s3 bucket name and endpoint from environment variable
-    s3_endpoint_url = getenv("LOCALSTACK_S3_ENDPOINT", None)
-    s3_bucket_name = getenv("S3_BUCKET_NAME", None)
+        # get text for inference from the event object
+        event_body_dict = json.loads(event["body"])
+        text = event_body_dict["text"]
 
-    model, tokenizer = load_tokenizer_model(s3_endpoint_url, s3_bucket_name)
-    pred_raw = inference(text, model, tokenizer)
-    final_result = postprocessing(pred_raw, id2label)
+        # get s3 bucket name and endpoint from environment variable
+        s3_endpoint_url = getenv("LOCALSTACK_ENDPOINT", None)
+        s3_bucket_name = getenv("S3_BUCKET_NAME", None)
 
-    lambda_result = {"statusCode": 200,
-                     "body": json.dumps(final_result)}
+        model, tokenizer = load_tokenizer_model(s3_endpoint_url, s3_bucket_name)
+        pred_raw = model_inference(text, model, tokenizer)
+        final_result = postprocessing(pred_raw, id2label)
+
+        status_code = 200
+
+    except BaseException as e:
+
+        final_result = {"message": "unexpected error"}
+        print("unexpected error", e, file=sys.stderr)
+        status_code = 500
+
+    lambda_result = {"statusCode": status_code, "body": json.dumps(final_result)}
 
     return lambda_result
