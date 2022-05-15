@@ -1,0 +1,10 @@
+.DS_Store
+
+__pycache__
+.pytest_cache
+__pypackages__
+.pdm.toml
+.tool-versions
+model-files
+
+node_modules

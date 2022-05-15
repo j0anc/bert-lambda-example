@@ -1,0 +1,14 @@
+version: '3'
+ 
+services:
+
+  localstack:
+    image: localstack/localstack:latest
+    environment:
+      SERVICES: s3
+      DEFAULT_REGION: ap-northeast-3
+      HOSTNAME_EXTERNAL: host.docker.internal
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - 4566:4566
