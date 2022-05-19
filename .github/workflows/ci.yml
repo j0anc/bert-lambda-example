@@ -1,0 +1,34 @@
+name: CI
+on: push
+jobs:
+  auto-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2 
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID_CI }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY_CI }}
+          aws-region: ap-northeast-3
+
+      - name: Set up python 3.9
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.9"
+
+      - name: Setup PDM and install dependencies
+        run: |
+          pip install pdm
+          pdm install -d
+          pdm install -G main
+        working-directory: app/
+
+      - name: Run test
+        env:
+          S3_BUCKET_NAME: ${{secrets.MODEL_BUCKET_NAME_CI }}
+        run: |
+          pdm run test
+        working-directory: app/
