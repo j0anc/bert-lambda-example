@@ -6,5 +6,6 @@ __pypackages__
 .pdm.toml
 .tool-versions
 model-files
+.env
 
 node_modules
