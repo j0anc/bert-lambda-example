@@ -16,7 +16,12 @@ jobs:
 
       - name: install cdk
         run: sudo npm install -g aws-cdk
-      
+
+      - name: install dependencies for deployment
+        run: |
+          npm install
+        working-directory: cdk/
+   
       - name: set up environment
         if: github.base_ref == 'main'
         run: |
