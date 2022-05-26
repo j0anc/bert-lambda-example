@@ -11,11 +11,14 @@ from app.inference import (
 
 def handler(event, context):
 
+    print("event", event)
+
     try:
 
         # get text for inference from the event object
         event_body_dict = json.loads(event["body"])
         text = event_body_dict["text"]
+        print("text", text)
 
         # get s3 bucket name and endpoint from environment variable
         s3_endpoint_url = getenv("LOCALSTACK_ENDPOINT", None)

@@ -3,7 +3,6 @@ import { Construct } from 'constructs';
 import * as lambda from "aws-cdk-lib/aws-lambda"
 import * as iam from "aws-cdk-lib/aws-iam"
 
-
 export class BERTLambdaStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
@@ -41,7 +40,6 @@ export class BERTLambdaStack extends Stack {
     new CfnOutput(this, "lambdaUrl", {
       value: lambdaUrl.url
     })
-
 
   }
 }
